@@ -1,0 +1,76 @@
+quiz_id,number,text,option_a,option_b,option_c,option_d,correct,points
+q1,1,Solve for x: 4x + 20 = 28,3,1,2,5,C,2
+q1,2,Solve for x: 4x + 8 = 36,6,7,8,10,B,1
+q1,3,Solve for x: 9x + 13 = 94,12,10,9,8,C,3
+q1,4,Solve for x: 6x + 14 = 50,7,5,6,9,C,1
+q1,5,Solve for x: 4x + 5 = 21,3,7,4,5,C,3
+q1,6,Solve for x: 4x + 9 = 29,4,6,8,5,D,3
+q1,7,Solve for x: 7x + 20 = 90,11,13,10,9,C,2
+q1,8,Solve for x: 8x + 13 = 69,6,8,7,10,C,2
+q1,9,Solve for x: 2x + 7 = 11,1,2,5,3,B,1
+q1,10,Solve for x: 7x + 20 = 27,2,3,4,1,D,3
+q1,11,Solve for x: 3x + 12 = 42,11,9,13,10,D,3
+q1,12,Solve for x: 8x + 5 = 93,11,14,12,10,A,2
+q1,13,Solve for x: 3x + 4 = 28,8,7,9,11,A,2
+q1,14,Solve for x: 3x + 5 = 11,2,3,5,1,A,2
+q1,15,Solve for x: 4x + 17 = 21,1,4,3,2,A,1
+q2,1,ما إعراب كلمة «الطالبُ» في جملة: نجحَ الطالبُ؟,فاعل مرفوع,مفعول به منصوب,مبتدأ مرفوع,خبر مرفوع,A,3
+q2,2,جمع كلمة «كتاب» هو:,كتابات,كُتُب,كواتب,أكتاب,B,1
+q2,3,ما نوع «لا» في: لا تهملْ دروسك؟,نافية,ناهية,زائدة,عاطفة,B,3
+q2,4,الفعل «يكتبون» من الأفعال:,الخمسة,الناقصة,الجامدة,المبنية,A,2
+q2,5,علامة نصب جمع المؤنث السالم:,الفتحة,الكسرة,الياء,الألف,B,1
+q2,6,ما ضد كلمة «الكرم»؟,الشجاعة,البخل,الصدق,الحلم,B,2
+q2,7,«إنّ» تنصب المبتدأ وترفع:,الفاعل,الخبر,المفعول,الحال,B,3
+q2,8,المثنى من «معلم» في حالة الرفع:,معلمَين,معلمون,معلمان,معلمين,C,2
+q2,9,ما الاسم المقصور مما يلي؟,القاضي,الفتى,السماء,الداعي,B,1
+q2,10,أي الكلمات التالية فعل ماضٍ؟,يذهب,اذهب,ذهب,ذاهب,C,2
+q2,11,كان وأخواتها ترفع المبتدأ وتنصب:,الفاعل,الخبر,التمييز,الحال,B,1
+q2,12,همزة «استخراج» همزة:,قطع,وصل,متوسطة,متطرفة,B,3
+q2,13,ما مفرد كلمة «أقلام»؟,قلم,قلمة,أقلوم,قالم,A,3
+q2,14,الحرف الذي يجزم الفعل المضارع:,لن,لم,أن,كي,B,3
+q2,15,ما نوع الجملة: «السماءُ صافيةٌ»؟,فعلية,اسمية,شرطية,إنشائية,B,2
+q3,1,A car travels 100 m in 5 s. Its average speed is:,10 m/s,20 m/s,25 m/s,500 m/s,B,1
+q3,2,Acceleration is the rate of change of:,Distance,Velocity,Mass,Force,B,3
+q3,3,SI unit of acceleration:,m/s,m/s²,N,kg·m,B,1
+q3,4,An object in free fall near Earth accelerates at about:,1 m/s²,9.8 m/s²,98 m/s²,0 m/s²,B,1
+q3,5,Displacement is a:,Scalar,Vector,Unit,Force,B,2
+q3,6,"v = u + at. If u=0, a=2, t=5, v =",7,10,2.5,25,B,1
+q3,7,Slope of a distance–time graph gives:,Acceleration,Speed,Force,Mass,B,1
+q3,8,Area under a velocity–time graph gives:,Acceleration,Displacement,Jerk,Power,B,3
+q3,9,A body at constant velocity has acceleration:,Zero,Positive,Negative,Infinite,A,2
+q3,10,Speed of 72 km/h in m/s:,20,72,7.2,36,A,2
+q3,11,Which is NOT a vector?,Velocity,Force,Time,Displacement,C,1
+q3,12,Ball thrown up: velocity at the top is:,Maximum,Zero,g,Negative max,B,1
+q3,13,"s = ut + ½at². u=0, a=4, t=3, s =",6,12,18,36,C,2
+q3,14,Deceleration means acceleration is:,Opposite to velocity,Zero,Along velocity,Perpendicular,A,2
+q3,15,Instantaneous speed is read from a car's:,Odometer,Speedometer,Tachometer,Barometer,B,2
+q4,1,Solve for x: 5x + 20 = 50,6,7,5,9,A,2
+q4,2,Solve for x: 3x + 8 = 14,1,2,5,3,B,2
+q4,3,Solve for x: 5x + 16 = 66,13,9,11,10,D,1
+q4,4,Solve for x: 3x + 13 = 49,11,12,15,13,B,2
+q4,5,Solve for x: 7x + 3 = 87,12,11,13,15,A,1
+q4,6,Solve for x: 4x + 6 = 18,2,4,6,3,D,1
+q4,7,Solve for x: 9x + 12 = 39,6,2,3,4,C,1
+q4,8,Solve for x: 4x + 14 = 30,3,7,4,5,C,1
+q4,9,Solve for x: 6x + 17 = 41,4,7,5,3,A,1
+q4,10,Solve for x: 2x + 12 = 28,9,8,7,11,B,3
+q4,11,Solve for x: 4x + 17 = 53,8,12,10,9,D,3
+q4,12,Solve for x: 2x + 5 = 11,2,3,6,4,B,3
+q4,13,Solve for x: 2x + 11 = 33,12,10,11,14,C,1
+q4,14,Solve for x: 5x + 9 = 14,4,2,3,1,D,3
+q4,15,Solve for x: 2x + 3 = 19,9,8,11,7,B,2
+q5,1,"Reading passage 2, question 1: choose the best answer.",Option one,Option two,Option three,Option four,D,1
+q5,2,"Reading passage 2, question 2: choose the best answer.",Option one,Option two,Option three,Option four,A,1
+q5,3,"Reading passage 2, question 3: choose the best answer.",Option one,Option two,Option three,Option four,A,1
+q5,4,"Reading passage 2, question 4: choose the best answer.",Option one,Option two,Option three,Option four,C,1
+q5,5,"Reading passage 2, question 5: choose the best answer.",Option one,Option two,Option three,Option four,D,1
+q5,6,"Reading passage 2, question 6: choose the best answer.",Option one,Option two,Option three,Option four,A,1
+q5,7,"Reading passage 2, question 7: choose the best answer.",Option one,Option two,Option three,Option four,A,1
+q5,8,"Reading passage 2, question 8: choose the best answer.",Option one,Option two,Option three,Option four,C,1
+q5,9,"Reading passage 2, question 9: choose the best answer.",Option one,Option two,Option three,Option four,D,1
+q5,10,"Reading passage 2, question 10: choose the best answer.",Option one,Option two,Option three,Option four,C,1
+q5,11,"Reading passage 2, question 11: choose the best answer.",Option one,Option two,Option three,Option four,D,1
+q5,12,"Reading passage 2, question 12: choose the best answer.",Option one,Option two,Option three,Option four,C,1
+q5,13,"Reading passage 2, question 13: choose the best answer.",Option one,Option two,Option three,Option four,A,1
+q5,14,"Reading passage 2, question 14: choose the best answer.",Option one,Option two,Option three,Option four,D,1
+q5,15,"Reading passage 2, question 15: choose the best answer.",Option one,Option two,Option three,Option four,C,1
