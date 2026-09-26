@@ -100,7 +100,7 @@ export async function buildSeed(hash: HashFn, csvs: SeedCsvs = DEFAULT_CSVS): Pr
       for (const q of quiz.questions) {
         const r = rand();
         if (r < 0.06) continue;
-        answers[q.id] = r < skill ? q.correct : LETTERS[Math.floor(rand() * 4)];
+        answers[q.id] = r < skill ? q.correct : LETTERS[Math.floor(rand() * 4)]!;
       }
       const start = new Date(new Date(quiz.opensAt).getTime() + Math.floor(rand() * 3) * 86400_000 + 9 * 3600_000);
       const res = scoreAttempt(quiz, answers);

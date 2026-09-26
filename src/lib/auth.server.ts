@@ -19,7 +19,7 @@ export function signToken(userId: string, expSec: number): string {
 export function verifyToken(token: string, nowSec: number): string | null {
   const parts = token.split(".");
   if (parts.length !== 3) return null;
-  const [userId, exp, sig] = parts;
+  const [userId, exp, sig] = parts as [string, string, string];
   const expected = createHmac("sha256", secret()).update(`${userId}.${exp}`).digest("base64url");
   const a = Buffer.from(sig);
   const b = Buffer.from(expected);

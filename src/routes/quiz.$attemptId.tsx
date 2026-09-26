@@ -81,7 +81,7 @@ function Taker({ view, onDone }: { view: View; onDone: (v: View) => void }) {
     return () => clearInterval(id);
   }, [deadline, doSubmit]);
 
-  const q = view.questions[idx];
+  const q = view.questions[idx]!;
   const answeredCount = Object.keys(answers).length;
   const unanswered = view.questions.length - answeredCount;
 
@@ -127,7 +127,7 @@ function Taker({ view, onDone }: { view: View; onDone: (v: View) => void }) {
         <p dir="auto" className="mb-5 text-lg font-medium leading-relaxed">{q.text}</p>
         <div className="space-y-2.5">
           {q.options.map((opt, i) => {
-            const L = LETTERS[i];
+            const L = LETTERS[i]!;
             const selected = answers[q.id] === L;
             return (
               <button

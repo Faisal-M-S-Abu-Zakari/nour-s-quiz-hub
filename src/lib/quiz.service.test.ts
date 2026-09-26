@@ -141,8 +141,8 @@ describe("attempt rules", () => {
     const me = db.users.find((u) => u.id === "s10a01")!;
     const a = svc.startAttempt(db, me, "t", now);
     svc.submitAttempt(db, me, a.id, {}, now);
-    expect(svc.attemptView(db, me, a.id, now).questions[0].correct).toBeNull();
-    expect(svc.attemptView(db, me, a.id, new Date("2027-01-01")).questions[0].correct).toBe("A");
+    expect(svc.attemptView(db, me, a.id, now).questions[0]!.correct).toBeNull();
+    expect(svc.attemptView(db, me, a.id, new Date("2027-01-01")).questions[0]!.correct).toBe("A");
   });
 
   it("locks quiz content once students have attempted it", async () => {

@@ -1,5 +1,6 @@
 /** Minimal RFC-4180 CSV parser (quotes, escaped quotes, newlines in fields, BOM). */
-export function parseCsv(input: string): Record<string, string>[] {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function parseCsv(input: string): any[] {
   const text = input.replace(/^\uFEFF/, "");
   const rows: string[][] = [];
   let row: string[] = [];
@@ -32,7 +33,7 @@ export function parseCsv(input: string): Record<string, string>[] {
   }
   const nonEmpty = rows.filter((r) => r.some((v) => v.trim() !== ""));
   if (!nonEmpty.length) return [];
-  const header = nonEmpty[0].map((h) => h.trim());
+  const header = nonEmpty[0]!.map((h) => h.trim());
   return nonEmpty.slice(1).map((r) =>
     Object.fromEntries(header.map((h, i) => [h, (r[i] ?? "").trim()])),
   );

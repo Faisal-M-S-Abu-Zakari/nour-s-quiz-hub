@@ -197,14 +197,14 @@ export function getQuizForEdit(db: DB, viewer: User, quizId: string) {
 }
 
 export interface QuizInput {
-  id?: string;
+  id?: string | undefined;
   title: string;
   className: string;
   durationMinutes: number;
   opensAt: string;
   closesAt: string;
   negativeMarking: number;
-  questions: { id?: string; text: string; options: [string, string, string, string]; correct: Letter; points: number }[];
+  questions: { id?: string | undefined; text: string; options: [string, string, string, string]; correct: Letter; points: number }[];
 }
 
 export function validateQuizInput(input: QuizInput): string[] {
