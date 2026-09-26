@@ -10,12 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as StudentRouteImport } from './routes/student'
 import { Route as QuizAttemptIdRouteImport } from './routes/quiz.$attemptId'
+import { Route as TeacherIndexRouteImport } from './routes/teacher.index'
+import { Route as TeacherQuizQuizIdRouteImport } from './routes/teacher.quiz.$quizId'
+import { Route as TeacherResultsQuizIdRouteImport } from './routes/teacher.results.$quizId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudentRoute = StudentRouteImport.update({
@@ -28,35 +37,88 @@ const QuizAttemptIdRoute = QuizAttemptIdRouteImport.update({
   path: '/quiz/$attemptId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeacherIndexRoute = TeacherIndexRouteImport.update({
+  id: '/teacher/',
+  path: '/teacher/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeacherQuizQuizIdRoute = TeacherQuizQuizIdRouteImport.update({
+  id: '/teacher/quiz/$quizId',
+  path: '/teacher/quiz/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeacherResultsQuizIdRoute = TeacherResultsQuizIdRouteImport.update({
+  id: '/teacher/results/$quizId',
+  path: '/teacher/results/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/student': typeof StudentRoute
   '/quiz/$attemptId': typeof QuizAttemptIdRoute
+  '/teacher/': typeof TeacherIndexRoute
+  '/teacher/quiz/$quizId': typeof TeacherQuizQuizIdRoute
+  '/teacher/results/$quizId': typeof TeacherResultsQuizIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/student': typeof StudentRoute
   '/quiz/$attemptId': typeof QuizAttemptIdRoute
+  '/teacher': typeof TeacherIndexRoute
+  '/teacher/quiz/$quizId': typeof TeacherQuizQuizIdRoute
+  '/teacher/results/$quizId': typeof TeacherResultsQuizIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/student': typeof StudentRoute
   '/quiz/$attemptId': typeof QuizAttemptIdRoute
+  '/teacher/': typeof TeacherIndexRoute
+  '/teacher/quiz/$quizId': typeof TeacherQuizQuizIdRoute
+  '/teacher/results/$quizId': typeof TeacherResultsQuizIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/student' | '/quiz/$attemptId'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/student'
+    | '/quiz/$attemptId'
+    | '/teacher/'
+    | '/teacher/quiz/$quizId'
+    | '/teacher/results/$quizId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/student' | '/quiz/$attemptId'
-  id: '__root__' | '/' | '/student' | '/quiz/$attemptId'
+  to:
+    | '/'
+    | '/admin'
+    | '/student'
+    | '/quiz/$attemptId'
+    | '/teacher'
+    | '/teacher/quiz/$quizId'
+    | '/teacher/results/$quizId'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/student'
+    | '/quiz/$attemptId'
+    | '/teacher/'
+    | '/teacher/quiz/$quizId'
+    | '/teacher/results/$quizId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   StudentRoute: typeof StudentRoute
   QuizAttemptIdRoute: typeof QuizAttemptIdRoute
+  TeacherIndexRoute: typeof TeacherIndexRoute
+  TeacherQuizQuizIdRoute: typeof TeacherQuizQuizIdRoute
+  TeacherResultsQuizIdRoute: typeof TeacherResultsQuizIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/student': {
@@ -82,13 +151,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizAttemptIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/teacher/': {
+      id: '/teacher/'
+      path: '/teacher'
+      fullPath: '/teacher/'
+      preLoaderRoute: typeof TeacherIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teacher/quiz/$quizId': {
+      id: '/teacher/quiz/$quizId'
+      path: '/teacher/quiz/$quizId'
+      fullPath: '/teacher/quiz/$quizId'
+      preLoaderRoute: typeof TeacherQuizQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teacher/results/$quizId': {
+      id: '/teacher/results/$quizId'
+      path: '/teacher/results/$quizId'
+      fullPath: '/teacher/results/$quizId'
+      preLoaderRoute: typeof TeacherResultsQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   StudentRoute: StudentRoute,
   QuizAttemptIdRoute: QuizAttemptIdRoute,
+  TeacherIndexRoute: TeacherIndexRoute,
+  TeacherQuizQuizIdRoute: TeacherQuizQuizIdRoute,
+  TeacherResultsQuizIdRoute: TeacherResultsQuizIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
