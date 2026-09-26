@@ -1,0 +1,6 @@
+quiz_id,title,teacher,class,duration_minutes,opens_at,closes_at,negative_marking
+q1,Algebra Week 3,t.khaled,10A,20,2026-09-20T08:00,2026-12-31T22:00,0
+q2,اختبار القواعد – الأسبوع الثالث,t.rania,10B,20,2026-09-20T08:00,2026-12-31T22:00,0.25
+q3,Kinematics Quiz,t.samer,11A,20,2026-09-20T08:00,2026-12-31T22:00,1
+q4,Algebra Week 2,t.khaled,10A,20,2026-09-13T08:00,2026-09-19T22:00,0
+q5,Reading Comprehension W2,t.hala,10B,15,2026-09-13T08:00,2026-09-19T22:00,0.25

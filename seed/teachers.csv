@@ -1,0 +1,6 @@
+username,name_ar,name_en,subject,password,role
+t.khaled,خالد العمري,Khaled Al-Omari,Mathematics,teacher123,teacher
+t.rania,رانيا حداد,Rania Haddad,Arabic,teacher123,teacher
+t.samer,سامر الزعبي,Samer Al-Zoubi,Physics,teacher123,teacher
+t.hala,هالة المصري,Hala Al-Masri,English,teacher123,teacher
+nour,نور الشريف,Nour Al-Sharif,Director,admin123,admin
