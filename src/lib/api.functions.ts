@@ -186,3 +186,64 @@ export const resetDemoData = createServerFn({ method: "POST" }).handler(async ()
   await resetDb();
   return { ok: true };
 });
+
+export const listClasses = createServerFn({ method: "GET" }).handler(async () => {
+  const { auth, getDb, svc } = await ctx();
+  await auth.requireRole("teacher", "admin");
+  return svc.classesOf(await getDb());
+});
+
+// ---- AI explanation ----
+
+export const explainMistake = createServerFn({ method: "POST" })
+  .inputValidator((d) =>
+    z.object({ attemptId: z.string().max(80), questionId: z.string().max(80), lang: z.enum(["ar", "en"]) }).parse(d),
+  )
+  .handler(async ({ data }) => {
+    const { auth, getDb, svc } = await ctx();
+    const me = await auth.requireRole("student");
+    let m;
+    try {
+      m = svc.mistakeForExplanation(await getDb(), me, data.attemptId, data.questionId, new Date());
+    } catch (e) {
+      if (e instanceof svc.RuleError) return { ok: false as const, error: "rule" as const, message: e.message };
+      throw e;
+    }
+    const ai = await import("./ai.server");
+    try {
+      const r = await ai.explainMistake({ lang: data.lang, ...m });
+      return { ok: true as const, ...r };
+    } catch (e) {
+      if (e instanceof ai.AiError) return { ok: false as const, error: e.code, message: e.message };
+      throw e;
+    }
+  });
+
+// ---- Spreadsheet import (admin) ----
+
+const rowsSchema = z.array(z.record(z.string(), z.string().max(2000))).max(3000);
+
+export const importRoster = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ kind: z.enum(["students", "teachers"]), rows: rowsSchema, apply: z.boolean() }).parse(d))
+  .handler(async ({ data }) => {
+    const { auth, mutate } = await ctx();
+    await auth.requireRole("admin");
+    const { hashPassword } = await import("./db.server");
+    const { importUsers } = await import("./import.service");
+    const hashes: Record<string, string> = {};
+    for (const r of data.rows) {
+      const lower = Object.fromEntries(Object.entries(r).map(([k, v]) => [k.trim().toLowerCase(), String(v).trim()]));
+      const u = (lower.username ?? "").toLowerCase();
+      if (u && lower.password) hashes[u] = await hashPassword(u, lower.password);
+    }
+    return mutate((db) => importUsers(db, data.kind, data.rows, hashes, data.apply));
+  });
+
+export const importQuiz = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ quizzes: rowsSchema, questions: rowsSchema, apply: z.boolean() }).parse(d))
+  .handler(async ({ data }) => {
+    const { auth, mutate } = await ctx();
+    await auth.requireRole("admin");
+    const { importQuizzes } = await import("./import.service");
+    return mutate((db) => importQuizzes(db, data.quizzes, data.questions, data.apply));
+  });

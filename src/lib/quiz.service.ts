@@ -227,7 +227,7 @@ export function validateQuizInput(input: QuizInput): string[] {
 }
 
 export function saveQuiz(db: DB, viewer: User, input: QuizInput): Quiz {
-  const errs = validateQuizInput(input);
+  const errs = validateQuizInput(input, classesOf(db));
   if (errs.length) throw new RuleError(errs.join(" "));
   const existing = input.id ? db.quizzes.find((q) => q.id === input.id) : undefined;
   if (input.id && (!existing || !canView(viewer, existing))) throw new RuleError("Quiz not found.");
@@ -341,7 +341,7 @@ export function quizResults(db: DB, viewer: User, quizId: string) {
 }
 
 export function adminOverview(db: DB, now: Date) {
-  const classes = CLASSES.map((c) => {
+  const classes = classesOf(db).map((c) => {
     const quizzes = db.quizzes.filter((q) => q.className === c);
     const students = db.users.filter((u) => u.role === "student" && u.className === c);
     const pcts: number[] = [];
@@ -379,4 +379,21 @@ export function adminOverview(db: DB, now: Date) {
       };
     });
   return { classes, students: studentRows, teachers: db.users.filter((u) => u.role === "teacher").length };
+}
+
+/** Data needed to explain a mistake. Only after answers are revealed, and only for the student's own wrong answer. */
+export function mistakeForExplanation(db: DB, student: User, attemptId: string, questionId: string, now: Date) {
+  const { a, quiz } = ownAttempt(db, student, attemptId);
+  if (!a.submittedAt || quizStatus(quiz, now) !== "closed") throw new RuleError("Explanations are available after the quiz closes.");
+  const q = quiz.questions.find((x) => x.id === questionId);
+  if (!q) throw new RuleError("Unknown question.");
+  const selected = a.answers[q.id];
+  if (!selected || selected === q.correct) throw new RuleError("Explanations are only for questions you answered incorrectly.");
+  const i = (l: Letter) => LETTERS.indexOf(l);
+  return {
+    question: q.text,
+    options: q.options,
+    selected: `${selected}. ${q.options[i(selected)]}`,
+    correct: `${q.correct}. ${q.options[i(q.correct)]}`,
+  };
 }
