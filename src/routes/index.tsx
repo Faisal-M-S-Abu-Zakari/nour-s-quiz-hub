@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GraduationCap } from "lucide-react";
 import { getSession, login } from "@/lib/api.functions";
 import { useI18n } from "@/lib/i18n";
+import { setToken } from "@/lib/session-token";
 import { homeFor, LangToggle } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,9 +51,13 @@ function LoginPage() {
     try {
       const r = await doLogin({ data: { username: u, password: p } });
       if (!r.ok) setError(t.invalidLogin);
-      else navigate({ to: homeFor(r.user.role) });
-    } catch {
-      setError(t.invalidLogin);
+      else {
+        setToken(r.token);
+        await navigate({ to: homeFor(r.user.role) });
+      }
+    } catch (e) {
+      console.error(e);
+      setError(`${t.loginFailed} ${e instanceof Error ? e.message : String(e)}`);
     } finally {
       setBusy(false);
     }
