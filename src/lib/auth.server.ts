@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { getCookie, setCookie, deleteCookie } from "@tanstack/react-start/server";
+import { getCookie, setCookie, deleteCookie, getRequestHeader } from "@tanstack/react-start/server";
 import { getDb } from "./db.server";
 import type { Role, User } from "./types";
 
@@ -28,23 +28,28 @@ export function verifyToken(token: string, nowSec: number): string | null {
   return userId;
 }
 
-export function startSession(userId: string) {
+/** Sets the session cookie and also returns the token: inside the editor preview (a cross-site
+ *  iframe) browsers may block cookies, so the client keeps a copy and sends it as a header. */
+export function startSession(userId: string): string {
   const exp = Math.floor(Date.now() / 1000) + MAX_AGE;
-  setCookie(COOKIE, signToken(userId, exp), {
+  const token = signToken(userId, exp);
+  setCookie(COOKIE, token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env["NODE_ENV"] === "production",
+    sameSite: "none",
+    secure: true,
+    partitioned: true,
     path: "/",
     maxAge: MAX_AGE,
   });
+  return token;
 }
 
 export function endSession() {
-  deleteCookie(COOKIE, { path: "/" });
+  deleteCookie(COOKIE, { path: "/", sameSite: "none", secure: true, partitioned: true });
 }
 
 export async function currentUser(): Promise<User | null> {
-  const token = getCookie(COOKIE);
+  const token = getCookie(COOKIE) || getRequestHeader("x-quiz-session");
   if (!token) return null;
   const id = verifyToken(token, Math.floor(Date.now() / 1000));
   if (!id) return null;

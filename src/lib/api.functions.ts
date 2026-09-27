@@ -28,8 +28,8 @@ export const login = createServerFn({ method: "POST" })
     const u = db.users.find((x) => x.id === username);
     const hash = await hashPassword(username, data.password);
     if (!u || u.passwordHash !== hash) return { ok: false as const, error: "invalid" };
-    auth.startSession(u.id);
-    return { ok: true as const, user: svc.publicUser(u) };
+    const token = auth.startSession(u.id);
+    return { ok: true as const, user: svc.publicUser(u), token };
   });
 
 export const logout = createServerFn({ method: "POST" }).handler(async () => {
