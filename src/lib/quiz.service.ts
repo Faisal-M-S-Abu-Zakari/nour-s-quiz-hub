@@ -207,10 +207,16 @@ export interface QuizInput {
   questions: { id?: string | undefined; text: string; options: [string, string, string, string]; correct: Letter; points: number }[];
 }
 
-export function validateQuizInput(input: QuizInput): string[] {
+/** Classes come from the student roster, so imported classes appear automatically. */
+export function classesOf(db: DB): string[] {
+  const set = new Set<string>(db.users.filter((u) => u.role === "student" && u.className).map((u) => u.className!));
+  return set.size ? [...set].sort() : [...CLASSES];
+}
+
+export function validateQuizInput(input: QuizInput, classes: readonly string[] = CLASSES): string[] {
   const errs: string[] = [];
   if (!input.title.trim()) errs.push("Title is required.");
-  if (!(CLASSES as readonly string[]).includes(input.className)) errs.push("Choose a class.");
+  if (!classes.includes(input.className)) errs.push("Choose a class.");
   if (!(input.durationMinutes >= 1 && input.durationMinutes <= 180)) errs.push("Duration must be 1–180 minutes.");
   const o = new Date(input.opensAt), c = new Date(input.closesAt);
   if (isNaN(o.getTime()) || isNaN(c.getTime())) errs.push("Opening and closing times are required.");
