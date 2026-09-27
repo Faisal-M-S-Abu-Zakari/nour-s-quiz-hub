@@ -1,6 +1,13 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
+import { getToken } from "./lib/session-token";
+
+// Sends the stored session token as a header, so sign-in works even where cookies are blocked.
+const sessionHeaderMiddleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
+  const token = getToken();
+  return next(token ? { headers: { "x-quiz-session": token } } : undefined);
+});
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -26,4 +33,5 @@ const csrfMiddleware = createCsrfMiddleware({
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware, csrfMiddleware],
+  functionMiddleware: [sessionHeaderMiddleware],
 }));

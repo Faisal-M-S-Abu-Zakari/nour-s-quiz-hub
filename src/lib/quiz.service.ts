@@ -207,10 +207,16 @@ export interface QuizInput {
   questions: { id?: string | undefined; text: string; options: [string, string, string, string]; correct: Letter; points: number }[];
 }
 
-export function validateQuizInput(input: QuizInput): string[] {
+/** Classes come from the student roster, so imported classes appear automatically. */
+export function classesOf(db: DB): string[] {
+  const set = new Set<string>(db.users.filter((u) => u.role === "student" && u.className).map((u) => u.className!));
+  return set.size ? [...set].sort() : [...CLASSES];
+}
+
+export function validateQuizInput(input: QuizInput, classes: readonly string[] = CLASSES): string[] {
   const errs: string[] = [];
   if (!input.title.trim()) errs.push("Title is required.");
-  if (!(CLASSES as readonly string[]).includes(input.className)) errs.push("Choose a class.");
+  if (!classes.includes(input.className)) errs.push("Choose a class.");
   if (!(input.durationMinutes >= 1 && input.durationMinutes <= 180)) errs.push("Duration must be 1–180 minutes.");
   const o = new Date(input.opensAt), c = new Date(input.closesAt);
   if (isNaN(o.getTime()) || isNaN(c.getTime())) errs.push("Opening and closing times are required.");
@@ -227,7 +233,7 @@ export function validateQuizInput(input: QuizInput): string[] {
 }
 
 export function saveQuiz(db: DB, viewer: User, input: QuizInput): Quiz {
-  const errs = validateQuizInput(input);
+  const errs = validateQuizInput(input, classesOf(db));
   if (errs.length) throw new RuleError(errs.join(" "));
   const existing = input.id ? db.quizzes.find((q) => q.id === input.id) : undefined;
   if (input.id && (!existing || !canView(viewer, existing))) throw new RuleError("Quiz not found.");
@@ -341,7 +347,7 @@ export function quizResults(db: DB, viewer: User, quizId: string) {
 }
 
 export function adminOverview(db: DB, now: Date) {
-  const classes = CLASSES.map((c) => {
+  const classes = classesOf(db).map((c) => {
     const quizzes = db.quizzes.filter((q) => q.className === c);
     const students = db.users.filter((u) => u.role === "student" && u.className === c);
     const pcts: number[] = [];
@@ -379,4 +385,21 @@ export function adminOverview(db: DB, now: Date) {
       };
     });
   return { classes, students: studentRows, teachers: db.users.filter((u) => u.role === "teacher").length };
+}
+
+/** Data needed to explain a mistake. Only after answers are revealed, and only for the student's own wrong answer. */
+export function mistakeForExplanation(db: DB, student: User, attemptId: string, questionId: string, now: Date) {
+  const { a, quiz } = ownAttempt(db, student, attemptId);
+  if (!a.submittedAt || quizStatus(quiz, now) !== "closed") throw new RuleError("Explanations are available after the quiz closes.");
+  const q = quiz.questions.find((x) => x.id === questionId);
+  if (!q) throw new RuleError("Unknown question.");
+  const selected = a.answers[q.id];
+  if (!selected || selected === q.correct) throw new RuleError("Explanations are only for questions you answered incorrectly.");
+  const i = (l: Letter) => LETTERS.indexOf(l);
+  return {
+    question: q.text,
+    options: q.options,
+    selected: `${selected}. ${q.options[i(selected)]}`,
+    correct: `${q.correct}. ${q.options[i(q.correct)]}`,
+  };
 }

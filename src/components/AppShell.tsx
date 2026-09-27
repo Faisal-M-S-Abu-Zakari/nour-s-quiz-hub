@@ -5,6 +5,7 @@ import { GraduationCap, LogOut, Languages } from "lucide-react";
 import type { ReactNode } from "react";
 import { getSession, logout } from "@/lib/api.functions";
 import { useFormat, useI18n } from "@/lib/i18n";
+import { setToken } from "@/lib/session-token";
 import type { PublicUser } from "@/lib/quiz.service";
 import type { Role } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -54,7 +55,8 @@ export function AppShell({ user, children, nav }: { user: PublicUser; children: 
               size="icon"
               aria-label={t.signOut}
               onClick={async () => {
-                await doLogout();
+                setToken(null);
+                await doLogout().catch(() => undefined);
                 qc.clear();
                 navigate({ to: "/", replace: true });
               }}
