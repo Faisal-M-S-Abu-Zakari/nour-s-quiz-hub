@@ -233,8 +233,8 @@ export const importRoster = createServerFn({ method: "POST" })
     const hashes: Record<string, string> = {};
     for (const r of data.rows) {
       const lower = Object.fromEntries(Object.entries(r).map(([k, v]) => [k.trim().toLowerCase(), String(v).trim()]));
-      const u = (lower.username ?? "").toLowerCase();
-      if (u && lower.password) hashes[u] = await hashPassword(u, lower.password);
+      const u = (lower["username"] ?? "").toLowerCase();
+      if (u && lower["password"]) hashes[u] = await hashPassword(u, lower["password"]);
     }
     return mutate((db) => importUsers(db, data.kind, data.rows, hashes, data.apply));
   });

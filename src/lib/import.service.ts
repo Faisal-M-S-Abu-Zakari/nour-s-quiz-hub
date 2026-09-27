@@ -15,7 +15,8 @@ export interface ImportResult {
   applied: boolean;
 }
 
-const norm = (r: Row): Row =>
+interface NRow { username?: string; name_ar?: string; name_en?: string; role?: string; class?: string; password?: string; subject?: string; [k: string]: string | undefined }
+const norm = (r: Row): NRow =>
   Object.fromEntries(Object.entries(r).map(([k, v]) => [k.trim().toLowerCase().replace(/\s+/g, "_"), String(v ?? "").trim()]));
 
 const USERNAME = /^[a-z0-9._-]{2,40}$/;
@@ -31,19 +32,19 @@ export function importUsers(
 ): ImportResult {
   const errors: string[] = [];
   const seen = new Set<string>();
-  const planned: { existing?: User; next: User }[] = [];
+  const planned: { existing: User | undefined; next: User }[] = [];
   rawRows.map(norm).forEach((r, i) => {
     const line = `Row ${i + 2}`;
     const username = (r.username ?? "").toLowerCase();
-    if (!USERNAME.test(username)) return errors.push(`${line}: invalid username "${r.username ?? ""}".`);
-    if (seen.has(username)) return errors.push(`${line}: username "${username}" appears twice.`);
+    if (!USERNAME.test(username)) return void errors.push(`${line}: invalid username "${r.username ?? ""}".`);
+    if (seen.has(username)) return void errors.push(`${line}: username "${username}" appears twice.`);
     seen.add(username);
     if (!r.name_ar) errors.push(`${line}: Arabic name is missing.`);
     if (!r.name_en) errors.push(`${line}: English name is missing.`);
     const existing = db.users.find((u) => u.id === username);
     const role = kind === "students" ? "student" : r.role?.toLowerCase() === "admin" ? "admin" : "teacher";
     if (existing && (existing.role === "student") !== (role === "student"))
-      return errors.push(`${line}: "${username}" already exists as a ${existing.role}.`);
+      return void errors.push(`${line}: "${username}" already exists as a ${existing.role}.`);
     if (kind === "students" && !CLASS.test(r.class ?? "")) errors.push(`${line}: class is missing or invalid.`);
     const hash = passwordHashes[username];
     if (!existing && !hash) errors.push(`${line}: password is required for new accounts.`);
@@ -75,7 +76,7 @@ export function importUsers(
 }
 
 const toCsv = (rows: Row[]) => {
-  const n = rows.map(norm);
+  const n = rows.map(norm) as Row[];
   const headers = [...new Set(n.flatMap((r) => Object.keys(r)))];
   const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
   return [headers.map(esc).join(","), ...n.map((r) => headers.map((h) => esc(r[h] ?? "")).join(","))].join("\n");
